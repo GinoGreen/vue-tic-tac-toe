@@ -13,9 +13,6 @@ export default {
    props: {
       char: String
    },
-   methods: {
-      
-   }
 }
 </script>
 

@@ -23,6 +23,10 @@ export default {
          board: ['', '', '', '', '', '', '', '', ''],
          currentPlayer: 'X',
          isGameActive: true,
+         PLAYERX_WON: 'PLAYERX_WON',
+         PLAYERY_WON: 'PLAYERY_WON',
+         TIE: 'TIE',
+         upshot: false, //esito
          /*
                Indici dentro il board:
                [0] [1] [2]
@@ -44,25 +48,51 @@ export default {
    methods: {
       userAction(boardIndex) {
 
-         // if (isValidAction(choose) && this.isGameActive) {
+         if (this.isValidAction(boardIndex) && this.isGameActive) {
             // aggiorno la board
             this.$set(this.board, boardIndex, this.currentPlayer);
-            console.log('board', this.board);
+            // check azione valida
+            this.handleResultValidation();
             // cambio turno giocatore
             this.changePlayer();
-            this.handleResultValidation();
-         // }
+         }
+      },
+      resetBoard() {
+
+         this.board = ['', '', '', '', '', '', '', '', ''];
+         this.isGameActive = true;
+         this.upshot = false;
+         this.$emit('announce', {turnFinished: this.upshot});
+      
+         if (this.currentPlayer === 'O') this.changePlayer;
       },
       changePlayer() {
          // operatore ternario per cambiare da X a O oppure viceversa
          this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+         this.$emit('changePlayer', this.currentPlayer)
       },
-      announce() {
+      announce(type) {
+         // switch per annunciare vincitore/pareggio
+         this.upshot = true;
+         this.$emit('announce', {
+            
+            turnFinished: this.upshot,
+            currentPlayer: this.currentPlayer,
+            type: type,
+         });
+
 
       },
+      isValidAction(index) {
+
+         if (this.board[index] === 'X' || this.board[index] === 'O') return false;
+         // altrimenti
+         return true;
+      },
       handleResultValidation() {
+
          let roundWon = false;
-         console.log('roundWon prima ciclo', roundWon);
+
          for (const winCondition of this.winningConditions) {
             
             const a = this.board[winCondition[0]];
@@ -77,13 +107,19 @@ export default {
             }
          }
 
-
-         console.log('roundWon dopo ciclo', roundWon);
-
          if (roundWon) {
-            this.announce();
+            this.announce(this.currentPlayer === 'X' ? this.PLAYERX_WON : this.PLAYERY_WON);
+            this.isGameActive = false;
+            return;
          }
+
+         if (!this.board.includes('')) this.announce(this.TIE);
       }
+   },
+   mounted() {
+      this.$root.$on('Board', () => {
+         this.resetBoard();
+      });
    }
 }
 </script>

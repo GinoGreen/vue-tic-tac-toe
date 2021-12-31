@@ -2,11 +2,13 @@
   <div id="wrapper">
     <div class="container"> 
 
-      <Title/>
+      <Title />
 
-      <ActivePlayer/>
+      <Announce :infoAnnounce="announce" v-if="announce.turnFinished" />
 
-      <Board/>
+      <ActivePlayer :playerChanged="playerChanged" v-else />
+
+      <Board @changePlayer="changePlayer" @announce="getAnnounce" />
 
     </div>
   </div>
@@ -16,6 +18,7 @@
 
 import Title from './components/Title.vue';
 import ActivePlayer from './components/ActivePlayer.vue';
+import Announce from './components/Announce.vue';
 import Board from './components/Board.vue';
 
 export default {
@@ -23,7 +26,27 @@ export default {
   components: {
     Title,
     ActivePlayer,
-    Board
+    Announce,
+    Board,
+  },
+  data() {
+    return {
+      announce: {},
+      reset: false,
+      playerChanged: 'X',
+
+    }
+  },
+  methods: {
+    getAnnounce(infoAnnounce) {
+      this.announce = infoAnnounce;
+    },
+    resetGame(reset) {
+      this.reset = reset
+    },
+    changePlayer(player) {
+      this.playerChanged = player
+    },
   }
 }
 </script>

@@ -20,3 +20,12 @@
    text-decoration: none;
    color: #000;
 }
+
+@mixin changePlayerX {
+   animation-name: showChangeX;
+   animation-duration: .35s;
+}
+@mixin changePlayerO {
+   animation-name: showChangeO;
+   animation-duration: .35s;
+}
