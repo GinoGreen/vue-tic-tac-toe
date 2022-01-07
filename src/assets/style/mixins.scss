@@ -23,7 +23,7 @@
 
 @mixin changePlayer($animationName) {
    @keyframes #{$animationName} {
-      @content;
+      @content
    }
    animation-name: $animationName;
    animation-duration: .35s;
