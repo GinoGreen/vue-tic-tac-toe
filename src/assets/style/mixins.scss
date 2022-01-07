@@ -21,11 +21,10 @@
    color: #000;
 }
 
-@mixin changePlayerX {
-   animation-name: showChangeX;
-   animation-duration: .35s;
-}
-@mixin changePlayerO {
-   animation-name: showChangeO;
+@mixin changePlayer($animationName) {
+   @keyframes #{$animationName} {
+      @content;
+   }
+   animation-name: $animationName;
    animation-duration: .35s;
 }

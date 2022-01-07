@@ -44,28 +44,18 @@ export default {
          z-index: 100;
       }
       .xTurn {
-         @include changePlayerX;
+         @include changePlayer('showChangeX'){
+            from { right: 0 }
+            to { right: 50% }
+         }
          right: 50%;
       }
-      @keyframes showChangeX {
-         from {
-            right: 0;
-         }
-         to {
-            right: 50%;
-         }
-      }
       .oTurn {
-         @include changePlayerO;
+         @include changePlayer('showChangeO'){
+            from { left: 0 }
+            to { left: 50% }
+         }
          left: 50%;
-      }
-      @keyframes showChangeO {
-         from {
-            left: 0;
-         }
-         to {
-            left: 50%;
-         }
       }
    }
 </style>
