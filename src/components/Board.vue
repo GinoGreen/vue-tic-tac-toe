@@ -1,10 +1,10 @@
 <template>
    <div id="board">
       <Square
-         v-for="(char, index) in board"
-         :key="index"
+         v-for="(char, boardPosition) in board"
+         :key="boardPosition"
          :char="char"
-         @chooseXO="userAction(index)"
+         @chooseXO="userActionOn(boardPosition)"
       />
    </div>
 </template>
@@ -24,9 +24,10 @@ export default {
          currentPlayer: 'X',
          isGameActive: true,
          PLAYERX_WON: 'PLAYERX_WON',
-         PLAYERY_WON: 'PLAYERY_WON',
+         PLAYERO_WON: 'PLAYERO_WON',
+         VACANCY: '',
          TIE: 'TIE',
-         upshot: false, //esito
+         outcome: false, //esito
          /*
                Indici dentro il board:
                [0] [1] [2]
@@ -46,12 +47,12 @@ export default {
       }
    },
    methods: {
-      userAction(boardIndex) {
+      userActionOn(boardPosition) {
 
-         if (this.isValidAction(boardIndex) && this.isGameActive) {
+         if (this.isValidAction(boardPosition) && this.isGameActive) {
             // aggiorno la board
-            this.$set(this.board, boardIndex, this.currentPlayer);
-            // check azione valida
+            this.$set(this.board, boardPosition, this.currentPlayer);
+            // gestione della convalida dei risultati
             this.handleResultValidation();
             // cambio turno giocatore
             this.changePlayer();
@@ -61,38 +62,44 @@ export default {
 
          this.board = ['', '', '', '', '', '', '', '', ''];
          this.isGameActive = true;
-         this.upshot = false;
-         this.$emit('announce', {turnFinished: this.upshot});
+         this.outcome = false;
+         this.$emit('announce', {turnFinished: this.outcome});
       
-         if (this.currentPlayer === 'O') this.changePlayer;
+         if (this.currentPlayer === 'O') this.changePlayer();
       },
       changePlayer() {
          // operatore ternario per cambiare da X a O oppure viceversa
          this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-         this.$emit('changePlayer', this.currentPlayer)
+         this.$emit('changePlayer', this.currentPlayer);
       },
-      announce(type) {
-         // switch per annunciare vincitore/pareggio
-         this.upshot = true;
+      announceOutcome(outcomeType) {
+
+         this.outcome = true;
+
          this.$emit('announce', {
-            
-            turnFinished: this.upshot,
+            turnFinished: this.outcome,
             currentPlayer: this.currentPlayer,
-            type: type,
+            outcomeType: outcomeType,
          });
-
-
       },
       isValidAction(index) {
 
          if (this.board[index] === 'X' || this.board[index] === 'O') return false;
          // altrimenti
+         console.log('true action');
          return true;
       },
       handleResultValidation() {
+         
+         if (this.thereIsTrisOnBoard()) {
+            this.announceOutcome(this.getOutcomeType());
+            this.isGameActive = false;
+            return;
+         }
 
-         let roundWon = false;
-
+         if (!this.board.includes(this.VACANCY)) this.announceOutcome(this.TIE);
+      },
+      thereIsTrisOnBoard() {
          for (const winCondition of this.winningConditions) {
             
             const a = this.board[winCondition[0]];
@@ -102,18 +109,13 @@ export default {
             if (a === '' || b === '' || c === '') continue; //passo direttamente all'iterazione succesiva
 
             if (a === b && b === c) {
-               roundWon = true;
-               break; //esco effettivamente dal ciclo
+               return true;
             }
          }
-
-         if (roundWon) {
-            this.announce(this.currentPlayer === 'X' ? this.PLAYERX_WON : this.PLAYERY_WON);
-            this.isGameActive = false;
-            return;
-         }
-
-         if (!this.board.includes('')) this.announce(this.TIE);
+         return false;
+      },
+      getOutcomeType() {
+         return this.currentPlayer === 'X' ? this.PLAYERX_WON : this.PLAYERO_WON
       }
    },
    mounted() {

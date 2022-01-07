@@ -4,7 +4,7 @@
       <!-- pareggio -->
       <div 
          class="upshot"
-         v-if="infoAnnounce.type === 'TIE'"
+         v-if="infoAnnounce.outcomeType === 'TIE'"
       >
          <h4>Pareggio!</h4>
       </div>

@@ -6,7 +6,7 @@
 
       <Announce :infoAnnounce="announce" v-if="announce.turnFinished" />
 
-      <ActivePlayer :playerChanged="playerChanged" v-else />
+      <ActivePlayer :currentPlayer="playerChanged" v-else />
 
       <Board @changePlayer="changePlayer" @announce="getAnnounce" />
 
