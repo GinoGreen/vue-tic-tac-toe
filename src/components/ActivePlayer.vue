@@ -4,7 +4,7 @@
       <div class="btns">
          <button class="btn-custom">X</button>
          <button class="btn-custom">O</button>
-         <div class="showChange" :class="[currentPlayer === 'X' ? 'xTurn' : 'oTurn']"></div>
+         <div class="showChange" :class="[newCurrentPlayer === 'X' ? 'xTurn' : 'oTurn']"></div>
       </div>
    </div>
 </template>
@@ -13,7 +13,7 @@
 export default {
    name: 'ActivePlayer',
    props: {
-      currentPlayer: String,
+      newCurrentPlayer: String,
    }
 }
 </script>

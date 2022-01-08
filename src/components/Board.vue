@@ -21,12 +21,12 @@ export default {
    data(){
       return{
          board: ['', '', '', '', '', '', '', '', ''],
-         currentPlayer: 'X',
          isGameActive: true,
-         PLAYERX_WON: 'PLAYERX_WON',
-         PLAYERO_WON: 'PLAYERO_WON',
+         currentPlayer: 'X',
          VACANCY: '',
          TIE: 'TIE',
+         PLAYERX_WON: 'PLAYERX_WON',
+         PLAYERO_WON: 'PLAYERO_WON',
          outcome: false, //esito
          /*
                Indici dentro il board:
@@ -58,12 +58,12 @@ export default {
             this.changePlayer();
          }
       },
-      resetBoard() {
+      resetFullGame() {
 
          this.board = ['', '', '', '', '', '', '', '', ''];
          this.isGameActive = true;
          this.outcome = false;
-         this.$emit('announce', {turnFinished: this.outcome});
+         this.$emit('sendDetailsAnnounce', {outcome: this.outcome});
       
          if (this.currentPlayer === 'O') this.changePlayer();
       },
@@ -76,23 +76,21 @@ export default {
 
          this.outcome = true;
 
-         this.$emit('announce', {
-            turnFinished: this.outcome,
+         this.$emit('sendDetailsAnnounce', {
             currentPlayer: this.currentPlayer,
+            outcome: this.outcome,
             outcomeType: outcomeType,
          });
       },
       isValidAction(index) {
 
          if (this.board[index] === 'X' || this.board[index] === 'O') return false;
-         // altrimenti
-         console.log('true action');
          return true;
       },
       handleResultValidation() {
          
          if (this.thereIsTrisOnBoard()) {
-            this.announceOutcome(this.getOutcomeType());
+            this.announceOutcome(this.getWinningPlayer());
             this.isGameActive = false;
             return;
          }
@@ -114,13 +112,13 @@ export default {
          }
          return false;
       },
-      getOutcomeType() {
-         return this.currentPlayer === 'X' ? this.PLAYERX_WON : this.PLAYERO_WON
+      getWinningPlayer() {
+         return this.currentPlayer === 'X' ? this.PLAYERX_WON : this.PLAYERO_WON;
       }
    },
    mounted() {
       this.$root.$on('Board', () => {
-         this.resetBoard();
+         this.resetFullGame();
       });
    }
 }

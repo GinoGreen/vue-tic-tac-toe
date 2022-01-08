@@ -4,11 +4,11 @@
 
       <Title />
 
-      <Announce :infoAnnounce="announce" v-if="announce.turnFinished" />
+      <Announce :detailsAnnounce="detailsAnnounce" v-if="detailsAnnounce.outcome" />
 
-      <ActivePlayer :currentPlayer="playerChanged" v-else />
+      <ActivePlayer :newCurrentPlayer="playerChanged" v-else />
 
-      <Board @changePlayer="changePlayer" @announce="getAnnounce" />
+      <Board @changePlayer="getNewCurrentPlayer" @sendDetailsAnnounce="getDetailsAnnounce" />
 
     </div>
   </div>
@@ -31,21 +31,17 @@ export default {
   },
   data() {
     return {
-      announce: {},
-      reset: false,
+      detailsAnnounce: {},
       playerChanged: 'X',
 
     }
   },
   methods: {
-    getAnnounce(infoAnnounce) {
-      this.announce = infoAnnounce;
+    getDetailsAnnounce(obj) {
+      this.detailsAnnounce = obj;
     },
-    resetGame(reset) {
-      this.reset = reset
-    },
-    changePlayer(player) {
-      this.playerChanged = player
+    getNewCurrentPlayer(currentPlayer) {
+      this.playerChanged = currentPlayer;
     },
   }
 }

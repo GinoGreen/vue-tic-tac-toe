@@ -3,25 +3,25 @@
 
       <!-- pareggio -->
       <div 
-         class="upshot"
-         v-if="infoAnnounce.outcomeType === 'TIE'"
+         class="outcome"
+         v-if="detailsAnnounce.outcomeType === 'TIE'"
       >
          <h4>Pareggio!</h4>
       </div>
 
       <!-- //vincita -->
       <div 
-         class="upshot"
+         class="outcome"
          v-else
       >
          <h4>Il vincitore é </h4>
-         <div class="player">{{ infoAnnounce.currentPlayer }}</div>
+         <div class="player">{{ detailsAnnounce.currentPlayer }}</div>
       </div>
 
       <!-- reset button -->
       <div 
          class="btns"
-         @click="resetBoard"
+         @click="resetFullGame"
       >
          <button class="btn-custom">RESET</button>
       </div>
@@ -32,10 +32,10 @@
 export default {
    name: 'Announce',
    props: {
-      infoAnnounce: Object,
+      detailsAnnounce: Object,
    },
    methods: {
-      resetBoard(){
+      resetFullGame(){
          this.$root.$emit('Board');
       },
    }
@@ -52,7 +52,7 @@ export default {
       flex-direction: column;
       font-size: 2.2em;
       
-      .upshot {
+      .outcome {
          @include center;
          .player {
             @include center;
