@@ -61,7 +61,6 @@ export default {
 
     .container {
       padding: 30px;
-
       border-radius: 20px;
       background: linear-gradient(to bottom, #2b2d47 10%, #181926);
       box-shadow: 
