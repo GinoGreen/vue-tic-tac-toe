@@ -20,10 +20,10 @@ export default {
    },
    data(){
       return{
-         board: ['', '', '', '', '', '', '', '', ''],
+         board: Array(9).fill(null),
          isGameActive: true,
          currentPlayer: 'X',
-         VACANCY: '',
+         VACANCY: null,
          TIE: 'TIE',
          PLAYERX_WON: 'PLAYERX_WON',
          PLAYERO_WON: 'PLAYERO_WON',
@@ -60,7 +60,7 @@ export default {
       },
       resetFullGame() {
 
-         this.board = ['', '', '', '', '', '', '', '', ''];
+         this.board = Array(9).fill(null);
          this.isGameActive = true;
          this.outcome = false;
          this.$emit('sendDetailsAnnounce', {outcome: this.outcome});
@@ -104,7 +104,7 @@ export default {
             const b = this.board[winCondition[1]];
             const c = this.board[winCondition[2]];
             
-            if (a === '' || b === '' || c === '') continue; //passo direttamente all'iterazione succesiva
+            if (a === null || b === null || c === null) continue; //passo direttamente all'iterazione succesiva
 
             if (a === b && b === c) {
                return true;
